@@ -82,7 +82,7 @@ func (s *BoltDBScheduler) Start() <-chan struct{} {
 			for {
 				select {
 				case <-time.After(s.period):
-					s.logger.Println("[DEBUG] beep...")
+					// s.logger.Println("[DEBUG] beep...")
 
 					tasks := []SheduleData{}
 
@@ -120,31 +120,22 @@ func (s *BoltDBScheduler) Start() <-chan struct{} {
 						continue
 					}
 
-					// ch, err := s.conn.Channel()
-
-					s.logger.Println("[DEBUG] queue length", len(tasks))
-
-					if err != nil {
-						s.logger.Println("[ERR] get channel", err)
-						continue
-					}
-
 					err = s.db.Update(func(tx *bolt.Tx) error {
 						b := tx.Bucket(s.bucketName)
 
 						for _, task := range tasks {
+
 							if err := s.pub.Publishing(task); err != nil {
 								s.logger.Println("[ERR] publish task ID", task.TaskID, err)
-								continue
+								return err
 							}
+
 							if err := b.Delete(task.TaskID.Bytes()); err != nil {
 								s.logger.Println("[ERR] remove task ID", task.TaskID, err)
 							}
 						}
 						return nil
 					})
-
-					// ch.Close()
 
 					if err != nil {
 						s.logger.Println("[ERR] update tasks", err)
