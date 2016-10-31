@@ -60,7 +60,7 @@ func TestScheduleBoltdbRabbitmq(t *testing.T) {
 
 			for i := 0; i < 100; i++ {
 				time.Sleep(time.Millisecond * time.Duration(i/10))
-				err := s.Shedule(uuid.NewV4(), []byte("data"), time.Now().Add(-time.Millisecond*100*time.Duration(i)))
+				err := s.Shedule(uuid.NewV4(), []byte("data"), time.Now().Add(-time.Millisecond*10*time.Duration(i)))
 				assert.NoError(t, err, "shedule")
 			}
 		}()
@@ -132,7 +132,7 @@ func TestSheduler_failpublish(t *testing.T) {
 
 			for i := 0; i < 100; i++ {
 				time.Sleep(time.Millisecond * time.Duration(i/10))
-				err := s.Shedule(uuid.NewV4(), []byte("data"), time.Now().Add(-time.Millisecond*100*time.Duration(i)))
+				err := s.Shedule(uuid.NewV4(), []byte("data"), time.Now().Add(-time.Millisecond*10*time.Duration(i)))
 				assert.NoError(t, err, "shedule")
 			}
 		}()

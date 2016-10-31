@@ -120,6 +120,8 @@ func (s *BoltDBScheduler) Start() <-chan struct{} {
 						continue
 					}
 
+					s.logger.Println("[INFO] count tasks", len(tasks))
+
 					err = s.db.Update(func(tx *bolt.Tx) error {
 						b := tx.Bucket(s.bucketName)
 
