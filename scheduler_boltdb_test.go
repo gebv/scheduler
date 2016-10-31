@@ -58,7 +58,7 @@ func TestScheduleBoltdbRabbitmq(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		go func() {
 
-			for i := 0; i < 100; i++ {
+			for i := 0; i < 50; i++ {
 				time.Sleep(time.Millisecond * time.Duration(i/10))
 				err := s.Shedule(uuid.NewV4(), []byte("data"), time.Now().Add(-time.Millisecond*10*time.Duration(i)))
 				assert.NoError(t, err, "shedule")
@@ -67,7 +67,6 @@ func TestScheduleBoltdbRabbitmq(t *testing.T) {
 	}
 
 	time.Sleep(time.Second)
-	assert.Equal(t, counter, 1000)
 
 	countTasks := 0
 	db.View(func(tx *bolt.Tx) error {
@@ -79,7 +78,7 @@ func TestScheduleBoltdbRabbitmq(t *testing.T) {
 		return nil
 	})
 
-	assert.Equal(t, counter, 1000)
+	assert.Equal(t, counter, 500)
 	assert.Equal(t, countTasks, 0)
 }
 
@@ -130,7 +129,7 @@ func TestSheduler_failpublish(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		go func() {
 
-			for i := 0; i < 100; i++ {
+			for i := 0; i < 50; i++ {
 				time.Sleep(time.Millisecond * time.Duration(i/10))
 				err := s.Shedule(uuid.NewV4(), []byte("data"), time.Now().Add(-time.Millisecond*10*time.Duration(i)))
 				assert.NoError(t, err, "shedule")
@@ -153,5 +152,5 @@ func TestSheduler_failpublish(t *testing.T) {
 	})
 
 	assert.Equal(t, counter, 0)
-	assert.Equal(t, countTasks, 1000)
+	assert.Equal(t, countTasks, 500)
 }
