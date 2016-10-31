@@ -41,7 +41,7 @@ func TestScheduleBoltdbRabbitmq(t *testing.T) {
 		db,
 		&TestPublisher{ch},
 		[]byte("name"),
-		time.Millisecond*100,
+		time.Millisecond*10,
 		log.New(os.Stdout, "[sheduler]", -1),
 	)
 	counter := 0
@@ -107,7 +107,7 @@ func TestSheduler_failpublish(t *testing.T) {
 		db,
 		&TestFailPublisher{TestPublisher{ch}},
 		[]byte("name"),
-		time.Millisecond*100,
+		time.Millisecond*10,
 		log.New(os.Stdout, "[sheduler]", -1),
 	)
 	counter := 0
